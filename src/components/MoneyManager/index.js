@@ -28,9 +28,14 @@ class MoneyManager extends Component {
   }
 
   deleteTransaction = id => {
-    const {transactionsList} = this.state
-    this.setState({
-      transactionsList: transactionsList.filter(trans => trans.id !== id),
+    this.setState(prevState => {
+      const updatedTransactionsList = prevState.transactionsList.filter(
+        transaction => transaction.id !== id,
+      )
+
+      return {
+        transactionsList: updatedTransactionsList,
+      }
     })
   }
 
@@ -60,10 +65,12 @@ class MoneyManager extends Component {
   onAddTransaction = event => {
     event.preventDefault()
     const {titleInput, amountInput, optionId} = this.state
-    const typeOption = transactionTypeOptions.find(
-      eachTrans => eachTrans.optionId === optionId,
+
+    const matchingOption = transactionTypeOptions.find(
+      each => each.optionId === optionId,
     )
-    const {displayText} = typeOption
+    const displayText = matchingOption ? matchingOption.displayText : ''
+
     const newTransaction = {
       id: v4(),
       title: titleInput,
@@ -120,7 +127,9 @@ class MoneyManager extends Component {
   }
 
   render() {
-    const {titleInput, amountInput, optionId, transactionsList} = this.state
+    const {titleInput, amountInput, optionId} = this.state
+    //  console.log(optionId)
+
     const balanceAmount = this.getBalance()
     const incomeAmount = this.getIncome()
     const expensesAmount = this.getExpenses()
@@ -177,9 +186,14 @@ class MoneyManager extends Component {
                 className="input"
                 id="selectType"
                 onChange={this.onChangeType}
+                value={optionId}
               >
                 {transactionTypeOptions.map(eachType => (
-                  <option className="option" key={eachType.optionId}>
+                  <option
+                    className="option"
+                    key={eachType.optionId}
+                    value={eachType.optionId}
+                  >
                     {eachType.displayText}
                   </option>
                 ))}
@@ -195,9 +209,9 @@ class MoneyManager extends Component {
             <h1 className="heading2">History</h1>
             <ul className="history-container">
               <li className="each-list-item">
-                <h1 className="history-titles">Title</h1>
-                <h1 className="history-titles">Amount</h1>
-                <h1 className="history-titles">Type</h1>
+                <p className="history-titles">Title</p>
+                <p className="history-titles">Amount</p>
+                <p className="history-titles">Type</p>
               </li>
               {this.renderTransactionsList()}
             </ul>

@@ -1,11 +1,10 @@
 import './index.css'
 
 const TransactionItem = props => {
-  const {transactionDetails} = props
+  const {transactionDetails, deleteTransaction} = props
   const {id, title, amount, type} = transactionDetails
-
+  // console.log(type)
   const onDeleteTrans = () => {
-    const {deleteTransaction} = props
     deleteTransaction(id)
   }
 
@@ -14,7 +13,12 @@ const TransactionItem = props => {
       <p className="detail">{title}</p>
       <p className="detail">{amount}</p>
       <p className="detail">{type}</p>
-      <button type="button" className="delete-btn" onClick={onDeleteTrans}>
+      <button
+        type="button"
+        className="delete-btn"
+        onClick={onDeleteTrans}
+        data-testid="delete"
+      >
         <img
           src="https://assets.ccbp.in/frontend/react-js/money-manager/delete.png"
           alt="delete"
